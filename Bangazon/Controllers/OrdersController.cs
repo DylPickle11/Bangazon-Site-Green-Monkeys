@@ -35,17 +35,18 @@ namespace Bangazon.Controllers
         }
 
         // GET: Orders/Details/5
+
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+         
+            var user = await GetCurrentUserAsync();
 
             var order = await _context.Order
                 .Include(o => o.PaymentType)
                 .Include(o => o.User)
-                .FirstOrDefaultAsync(m => m.OrderId == id);
+                .Include(o => o.OrderProducts)
+                     .ThenInclude(op => op.Product)
+                .FirstOrDefaultAsync(m => m.UserId == user.Id && m.DateCompleted == null);
             if (order == null)
             {
                 return NotFound();
