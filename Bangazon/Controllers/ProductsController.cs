@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Bangazon.Data;
 using Bangazon.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Bangazon.Controllers
 {
+    [Authorize]
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -32,6 +34,8 @@ namespace Bangazon.Controllers
         // GET: Products in the search bar
         public async Task<IActionResult> Index(string searchQuery)
         {
+            var user = await GetCurrentUserAsync();
+
             if (searchQuery == null)
             {
                 return View(await _context.Product
