@@ -22,12 +22,6 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.DateCompleted)
         </dd>
-        @*<dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.User.FirstName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.User.FirstName)
-        </dd>*@
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.PaymentType)
         </dt>
@@ -45,7 +39,7 @@
         }
     </dl>
     <div>
-        <a asp-action="Index" asp-route-id="@Model.OrderId" asp-controller="PaymentTypes">Complete Order</a> |
+        <a asp-action="Edit" asp-route-id="@Model.OrderId" asp-controller="Orders">Complete Order</a> |
 
     </div>
 </div>

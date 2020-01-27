@@ -38,7 +38,7 @@ namespace Bangazon.Controllers
 
         public async Task<IActionResult> Details(int? id)
         {
-         
+           
             var user = await GetCurrentUserAsync();
 
             var order = await _context.Order
@@ -94,7 +94,7 @@ namespace Bangazon.Controllers
             {
                 return NotFound();
             }
-            ViewData["PaymentTypeId"] = new SelectList(_context.PaymentType, "PaymentTypeId", "AccountNumber", order.PaymentTypeId);
+            ViewData["PaymentTypeId"] = new SelectList(_context.PaymentType, "PaymentTypeId", "PaymentTypeId", order.PaymentTypeId);
             ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", order.UserId);
             return View(order);
         }
