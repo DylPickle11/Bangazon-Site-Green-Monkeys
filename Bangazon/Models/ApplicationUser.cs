@@ -9,7 +9,7 @@ namespace Bangazon.Models
     {
         public ApplicationUser()
         {
-             
+          
         }
 
         [Required]
