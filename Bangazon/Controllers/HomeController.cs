@@ -20,26 +20,25 @@ namespace Bangazon.Controllers
             _context = context;
             _userManager = userManager;
         }
-
         // GET: Products
-        public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.Product.Include(p => p.ProductType).Include(p => p.User);
-            return View(await applicationDbContext.ToListAsync());
-        }
-        public async Task<IActionResult> Details(string searchQuery)
+        //public async Task<IActionResult> Index()
+        //{
+        //    var applicationDbContext = _context.Product.Include(p => p.ProductType).Include(p => p.User);
+        //    return View(await applicationDbContext.ToListAsync());
+        //}
+        public async Task<IActionResult> Index(string searchQuery)
         {
             if (searchQuery == null)
             {
-                return View(await _context.Product
-                       .ToListAsync());
+                var emptyList = new List<Product>();
+                return View(emptyList);
             }
             else
             {
                 //searchQuery = searchQuery;
                 return View(await _context.Product
-              .Where(p => p.Title.Equals(searchQuery))
-                    .ToListAsync()); ;
+              .Where(p => p.City.Equals(searchQuery))
+                    .ToListAsync());
             }
         }
 
@@ -47,6 +46,7 @@ namespace Bangazon.Controllers
         {
             return View();
         }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
