@@ -49,7 +49,8 @@ namespace Bangazon.Controllers
                 .FirstOrDefaultAsync(m => m.UserId == user.Id && m.DateCompleted == null);
             if (order == null)
             {
-                return NotFound();
+                TempData["NoOrders"] = "Your Cart is Empty.";
+                return RedirectToAction("Index", "Home");
             }
 
             return View(order);
@@ -84,6 +85,8 @@ namespace Bangazon.Controllers
         // GET: Orders/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var user = await GetCurrentUserAsync();
+
             if (id == null)
             {
                 return NotFound();
@@ -95,8 +98,7 @@ namespace Bangazon.Controllers
                 return NotFound();
             }
            
-            ViewData["PaymentTypeId"] = new SelectList(_context.PaymentType, "PaymentTypeId", "PaymentTypeId", order.PaymentTypeId);
-            //ViewData["AccountNumber"] = new SelectList(_context.PaymentType, "AccountNumber", "AccountNumber", order.PaymentType.AccountNumber);
+            ViewData["PaymentTypeId"] = new SelectList(_context.PaymentType, "PaymentTypeId", "Description", order.PaymentTypeId);
             ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", order.UserId);
             return View(order);
         }
@@ -108,8 +110,11 @@ namespace Bangazon.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("OrderId,DateCreated,DateCompleted,UserId,PaymentTypeId")] Order order)
         {
+            ModelState.Remove("User");
+
             if (id != order.OrderId)
             {
+
                 return NotFound();
             }
 
@@ -117,6 +122,7 @@ namespace Bangazon.Controllers
             {
                 try
                 {
+                    order.DateCompleted = DateTime.Now;
                     _context.Update(order);
                     await _context.SaveChangesAsync();
                 }
@@ -131,9 +137,10 @@ namespace Bangazon.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                TempData["SuccessMessage"] = "Thanks for ordering!";
+                return RedirectToAction("Index", "Home");
             }
-            ViewData["PaymentTypeId"] = new SelectList(_context.PaymentType, "PaymentTypeId", "AccountNumber", order.PaymentTypeId);
+            ViewData["PaymentTypeId"] = new SelectList(_context.PaymentType, "PaymentTypeId", "Description", order.PaymentTypeId);
             ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", order.UserId);
             return View(order);
         }

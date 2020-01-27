@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Bangazon.Models;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace Bangazon
 {
@@ -32,6 +33,7 @@ namespace Bangazon
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
