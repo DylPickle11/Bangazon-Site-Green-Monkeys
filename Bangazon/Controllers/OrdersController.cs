@@ -88,13 +88,15 @@ namespace Bangazon.Controllers
             {
                 return NotFound();
             }
-
-            var order = await _context.Order.FindAsync(id);
+            var order = await _context.Order
+                .FindAsync(id);
             if (order == null)
             {
                 return NotFound();
             }
+           
             ViewData["PaymentTypeId"] = new SelectList(_context.PaymentType, "PaymentTypeId", "PaymentTypeId", order.PaymentTypeId);
+            //ViewData["AccountNumber"] = new SelectList(_context.PaymentType, "AccountNumber", "AccountNumber", order.PaymentType.AccountNumber);
             ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", order.UserId);
             return View(order);
         }
