@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<Bangazon.Models.Product>
 
 @{
-    ViewData["Title"] = "ProductCatergories";
+    ViewData["Title"] = "ProductCategories";
 }
 
-<h1>ProductCatergories</h1>
+<h1>ProductCategories</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -40,7 +40,7 @@
                 @Html.DisplayNameFor(model => model.User)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProductType)
+                @Html.DisplayNameFor(model => model.ProductType.Label)
             </th>
             <th></th>
         </tr>

@@ -25,11 +25,11 @@ namespace Bangazon.Controllers
         }
 
         // GET: Products
-        [HttpGet, ActionName("Get")]
-        public async Task<IActionResult> ProductCatergories()
+        [HttpGet, ActionName("ProductCategories")]
+        public async Task<IActionResult> ProductCategories()
         {
-            var productType = _context.ProductType.Include(p => p.ProductTypeId).Include(p => p.Products);
-            return View(await productType.ToListAsync());
+            var product = _context.Product.Include(p => p.ProductType);
+            return View(await product.ToListAsync());
         }
 
         // GET: Products in the search bar
