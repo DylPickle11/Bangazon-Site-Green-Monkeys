@@ -20,7 +20,14 @@ namespace Bangazon.Controllers
             _context = context;
             _userManager = userManager;
         }
-        public async Task<IActionResult> Index(string searchQuery)
+
+        // GET: Products
+        public async Task<IActionResult> Index()
+        {
+            var applicationDbContext = _context.Product.Include(p => p.ProductType).Include(p => p.User);
+            return View(await applicationDbContext.ToListAsync());
+        }
+        public async Task<IActionResult> Details(string searchQuery)
         {
             if (searchQuery == null)
             {
@@ -32,7 +39,7 @@ namespace Bangazon.Controllers
                 //searchQuery = searchQuery;
                 return View(await _context.Product
               .Where(p => p.Title.Equals(searchQuery))
-                    .ToListAsync());
+                    .ToListAsync()); ;
             }
         }
 
