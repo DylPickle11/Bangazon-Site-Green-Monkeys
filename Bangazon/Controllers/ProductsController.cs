@@ -77,7 +77,11 @@ namespace Bangazon.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "Label");
+            List <SelectListItem> productTypeDropdown = new SelectList(_context.ProductType, "ProductTypeId", "Label").ToList();
+            productTypeDropdown.Insert(0, (new SelectListItem { Text = "Choose", Value = "0" }));
+            ViewData["ProductTypeId"] = productTypeDropdown;
+
+
             //ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
             return View();
         }
@@ -98,6 +102,11 @@ namespace Bangazon.Controllers
 
             if (ModelState.IsValid)
             {
+                if (product.ProductTypeId == 0) {
+                    TempData["Message"] = "Not Working";
+                    return View(product);
+
+                }
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Details" , "Products", new {id = product.ProductId });
