@@ -10,81 +10,82 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Quantity" class="control-label"></label>
-                <input asp-for="Quantity" class="form-control" />
-                <span asp-validation-for="Quantity" class="text-danger"></span>
-            </div>
-            @*<div class="form-group">
-                    <label asp-for="UserId" class="control-label"></label>
-                    <select asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
-                </div>*@
+        @*<form asp-action="Create">*@
+            <form method="post" enctype="multipart/form-data" asp-controller="FileUpload" asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Price" class="control-label"></label>
+                    <input asp-for="Price" class="form-control" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Quantity" class="control-label"></label>
+                    <input asp-for="Quantity" class="form-control" />
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+                @*<div class="form-group">
+                <label asp-for="UserId" class="control-label"></label>
+                <select asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
+            </div>*@
 
-            @* Add local deliver *@
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input id="check-input" class="form-check-input" asp-for="IsLocal" /> @*@Html.DisplayNameFor()*@
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="City" class="control-label"></label>
-                <input id="city" asp-for="City" class="form-control" type="hidden" />
-                <span asp-validation-for="City" class="text-danger"></span>
-            </div>
-            <script type="text/Javascript">
+                @* Add local deliver *@
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input id="check-input" class="form-check-input" asp-for="IsLocal" /> @*@Html.DisplayNameFor()*@
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label asp-for="City" class="control-label"></label>
+                    <input id="city" asp-for="City" class="form-control" type="hidden" />
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+                <script type="text/Javascript">
 
-                var islocalCheckBox = document.getElementById("check-input");
-                var cityInput = document.getElementById("city");
+                    var islocalCheckBox = document.getElementById("check-input");
+                    var cityInput = document.getElementById("city");
 
-                islocalCheckBox.addEventListener("change", function () {
-                    console.log(islocalCheckBox)
-                    if (islocalCheckBox.checked) {
-                        cityInput.removeAttribute("type")
-                    } else {
-                        cityInput.setAttribute("type", "hidden")
-                    }
-                });
+                    islocalCheckBox.addEventListener("change", function () {
+                        console.log(islocalCheckBox)
+                        if (islocalCheckBox.checked) {
+                            cityInput.removeAttribute("type")
+                        } else {
+                            cityInput.setAttribute("type", "hidden")
+                        }
+                    });
 
-            </script>
-            @*Here is where photo goes*@
+                </script>
+                @*Here is where photo goes*@
 
-            @*<div class="form-group">
-                    <label asp-for="ImagePath" class="control-label"></label>
-                    <input asp-for="ImagePath" class="form-control" />
-                    <span asp-validation-for="ImagePath" class="text-danger"></span>
-                </div>*@
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Active" /> @Html.DisplayNameFor(model => model.Active)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProductTypeId" class="control-label"></label>
-                <select id="ProductType" asp-for="ProductTypeId" class="form-control" asp-items="ViewBag.ProductTypeId">Blank</select>
-                <span asp-validation-for="ProductTypeId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input id="submit" type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+                @*<div class="form-group">
+                <label asp-for="ImagePath" class="control-label"></label>
+                <input asp-for="ImagePath" class="form-control" />
+                <span asp-validation-for="ImagePath" class="text-danger"></span>
+            </div>*@
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="Active" /> @Html.DisplayNameFor(model => model.Active)
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProductTypeId" class="control-label"></label>
+                    <select id="ProductType" asp-for="ProductTypeId" class="form-control" asp-items="ViewBag.ProductTypeId">Blank</select>
+                    <span asp-validation-for="ProductTypeId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input id="submit" type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+</div>
 </div>
 
 <div>
