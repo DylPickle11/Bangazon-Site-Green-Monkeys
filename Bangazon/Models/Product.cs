@@ -43,11 +43,16 @@ namespace Bangazon.Models
 
         public bool Active { get; set; }
 
+        public bool IsLocal { get; set; }
+
         [Required]
         public ApplicationUser User { get; set; }
 
+
+        //int.max 
         [Required]
         [Display(Name="Product Category")]
+        [Range(1, int.MaxValue, ErrorMessage = "Please Select a Product Category")]
         public int ProductTypeId { get; set; }
 
         public ProductType ProductType { get; set; }

@@ -25,11 +25,12 @@ namespace Bangazon.Controllers
         }
 
         // GET: Products
-        //public async Task<IActionResult> Index()
-        //{
-        //    var applicationDbContext = _context.Product.Include(p => p.ProductType).Include(p => p.User);
-        //    return View(await applicationDbContext.ToListAsync());
-        //}
+        [HttpGet, ActionName("ProductCategories")]
+        public async Task<IActionResult> ProductCategories()
+        {
+            var product = _context.Product.Include(p => p.ProductType);
+            return View(await product.ToListAsync());
+        }
 
         // GET: Products in the search bar
         public async Task<IActionResult> Index(string searchQuery)
@@ -76,7 +77,11 @@ namespace Bangazon.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "Label");
+            List <SelectListItem> productTypeDropdown = new SelectList(_context.ProductType, "ProductTypeId", "Label").ToList();
+            productTypeDropdown.Insert(0, (new SelectListItem { Text = "Choose", Value = "0" }));
+            ViewData["ProductTypeId"] = productTypeDropdown;
+
+
             //ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
             return View();
         }
@@ -97,6 +102,11 @@ namespace Bangazon.Controllers
 
             if (ModelState.IsValid)
             {
+                if (product.ProductTypeId == 0) {
+                    TempData["Message"] = "Not Working";
+                    return View(product);
+
+                }
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Details" , "Products", new {id = product.ProductId });
