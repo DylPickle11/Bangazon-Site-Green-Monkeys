@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<Bangazon.Models.PaymentType>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "OrderPayIndex";
 }
 
-<h1>Index</h1>
+<h1>OrderPayIndex</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -20,6 +20,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.AccountNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User)
             </th>
             <th></th>
         </tr>
@@ -37,9 +40,10 @@
                 @Html.DisplayFor(modelItem => item.AccountNumber)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.PaymentTypeId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.PaymentTypeId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.PaymentTypeId">Delete</a>
+                @Html.DisplayFor(modelItem => item.User.Id)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.PaymentTypeId">Add Payment To Order</a> |
             </td>
         </tr>
 }
