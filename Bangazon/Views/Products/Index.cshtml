@@ -79,6 +79,8 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ProductType.Label)
             </td>
+            <img class="img-responsive" src="@Url.Content("~/images/" + item.ImagePath)" alt="" />
+
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |

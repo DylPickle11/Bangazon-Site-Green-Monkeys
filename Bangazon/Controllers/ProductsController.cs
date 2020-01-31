@@ -9,6 +9,9 @@ using Bangazon.Data;
 using Bangazon.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Bangazon.Models.ViewModels;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace Bangazon.Controllers
 {
@@ -57,6 +60,7 @@ namespace Bangazon.Controllers
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+
             if (id == null)
             {
                 return NotFound();
@@ -75,15 +79,17 @@ namespace Bangazon.Controllers
         }
 
         // GET: Products/Create
-        public IActionResult Create()
+        public IActionResult CreateAsync()
         {
-            List <SelectListItem> productTypeDropdown = new SelectList(_context.ProductType, "ProductTypeId", "Label").ToList();
+            var viewModel = new ProductCreateViewModel();
+
+            List<SelectListItem> productTypeDropdown = new SelectList(_context.ProductType, "ProductTypeId", "Label").ToList();
             productTypeDropdown.Insert(0, (new SelectListItem { Text = "Choose", Value = "0" }));
             ViewData["ProductTypeId"] = productTypeDropdown;
 
 
             //ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
-            return View();
+            return View(viewModel);
         }
 
         // POST: Products/Create
@@ -91,29 +97,60 @@ namespace Bangazon.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,DateCreated,Description,Title,Price,Quantity,UserId,City,ImagePath,Active,ProductTypeId")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductId,DateCreated,Description,Title,Price,Quantity,UserId,City,ImagePath,Active,ProductTypeId,File")] ProductCreateViewModel viewModel, IFormFile image)
         {
+
             // Enitity frameworks knows with just userId
             ModelState.Remove("User");
             ModelState.Remove("UserId");
 
             var user = await GetCurrentUserAsync();
-            product.UserId = user.Id;
+            viewModel.Active = true;
+
+
+            if (viewModel.ProductTypeId == 0)
+            {
+                TempData["Message"] = "Not Working";
+                return View(viewModel);
+
+            }
 
             if (ModelState.IsValid)
             {
-                if (product.ProductTypeId == 0) {
-                    TempData["Message"] = "Not Working";
-                    return View(product);
 
+                var product = new Product()
+                {
+                    Active = viewModel.Active,
+                    City = viewModel.City,
+                    Description = viewModel.Description,
+                    IsLocal = viewModel.IsLocal,
+                    Title = viewModel.Title,
+                    Price = viewModel.Price,
+                    Quantity = viewModel.Quantity,
+                    ProductTypeId = viewModel.ProductTypeId,
+                };
+
+                product.UserId = user.Id;
+
+
+                if (viewModel.File != null && viewModel.File.Length > 0)
+                {
+                    var fileName = Guid.NewGuid().ToString() + Path.GetFileName(viewModel.File.FileName); //getting path of actual file name
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName); //creating path combining file name w/ www.root\\images directory
+                    using (var fileSteam = new FileStream(filePath, FileMode.Create)) //using filestream to get the actual path
+                    {
+                        await viewModel.File.CopyToAsync(fileSteam);
+                    }
+                    product.ImagePath = fileName;
                 }
+
                 _context.Add(product);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Details" , "Products", new {id = product.ProductId });
+                return RedirectToAction("Details", "Products", new { id = product.ProductId });
             }
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "Label", product.ProductTypeId);
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", product.UserId);
-            return View(product);
+            ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "Label", viewModel.ProductTypeId);
+            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", viewModel.UserId);
+            return View(viewModel);
         }
 
         // GET: Products/Edit/5
